@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" href="{% static 'img/site-pic.ico' %}" type="image/icon type"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>Weather Forecast By VARIMA</title>
+</head>
+<body>
+    <!-- 🔹 Navbar with Models & Comparison Dropdown -->
+    <main class="{{ description }}" >
+        <section class="side-container" >
+            <form method="POST" >
+                {% csrf_token %}
+                <div class="search-container" >
+                    <div style="width: 22px; height: 22px; color: white;" class="weather-icon">
+                           <i class="bi bi-search"></i>
+                    </div>
+                    <input
+                        type="text"
+                        name="city"
+                        placeholder="ex. Lahore England"
+                        class="geo-input"
+                        value="{{ location }}"
+                    />
+                    <button class="Search-button">
+                        <div style="width: 25px; height: 25px; color: white;">
+                            <i class="bi bi-search"></i>
+                        </div>
+                    </button>
+                </div>
+            </form>
+            <div class="day-stats" >
+                <h2 class="day-stats_temperature">
+                    <span class="day-stats_temperature_value">{{ current_temp }}</span>º
+                </h2>
+                <h3 class="day-stats_feelslike" >
+                    Feels like:&nbsp&nbsp<span class="day-stats_feelslike_value">{{ feels_like }}</span>
+                </h3> 
+                <ul class="day-stats_conditions">
+                <li>
+                    <p class="day-stats_condition">
+                    <span class="day-stats_humidity">{{humidity}}</span>%
+                    <span class="day-stats condition text">of humidity</span>
+                    </p>
+                </li>
+                 </ul> 
+                <div class="dropdown-container">
+                    <button onclick="toggleDropdown('modelDropdown')" class="dropbtn">Model</button>
+                    <div id="modelDropdown" class="dropdown-content">
+                        <a href="{% url 'weather_view' %}">Logistic Regression</a>
+                        <a href="{% url 'arima_view' %}">ARIMA</a>
+                        <a href="{% url 'sarima_view' %}">SARIMA</a>
+                        <a href="{% url 'var_view' %}">VAR</a>
+                    </div>
+                </div>
+                 <div class="dropdown-container">
+                    <a href="{% url 'compare_view' %}" class="dropbtn">Comparison</a>
+                </div>
+            </div>
+        </section>
+
+         <section class="main-container">
+            <h4 class="secondary-title">Weather Forecast By VARIMA</h4>
+             <h1 class="weather_primary-title">{{ description }}</h1>
+            <div class="weather_location">
+                <div style="width: 15px; height: 15px; color: white;" class="location-icon">
+                    <i class="bi bi-geo-alt"></i>
+                </div>
+                <p class="weather_location-text">
+                <span class="weather_location-city">{{ city }} </span>
+                <span class="weather_location-country">{{ country }} </span>
+                <span class="weather_location-date">{{ time }} </span>
+                 </p>
+            </div>
+            <p class="weather_primary-stats">
+                <span class="weatherWindKph">{{ windspeed }}</span> kilometers per hour. 
+                Pressure is <span class="weatherPressure">{{ sealevelpressure }}</span> mb. 
+                Visibility is <span class="weatherSnow">{{ visibility }}</span>. 
+                Maximum temperature is <span class="weatherMaxTemp">{{ tempmax }}</span>º.
+                Minimum temperature is <span class="weatherMinTemp">{{ tempmin }}</span>º.
+                rainfall is <span class="weatherRain">{{ precip }}</span> mm.
+            </p>
+           <ul class="forecast">
+                <li class="forecast-item">
+                    <p class="forecast-time">{{ time1 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp1 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity1 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip1 }}</span> mm</p>
+
+                </li>
+                                <li class="forecast-item">
+                    <p class="forecast-time">{{ time2 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp2 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity2 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip2 }}</span> mm</p>
+
+                </li>
+                <li class="forecast-item">
+                    <p class="forecast-time">{{ time3 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp3 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity3 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip3 }}</span> mm</p>
+                </li>
+                <li class="forecast-item">
+                    <p class="forecast-time">{{ time4 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp4 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity4 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip4 }}</span> mm</p>
+                </li>
+                <li class="forecast-item">
+                    <p class="forecast-time">{{ time5 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp5 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity5 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip5 }}</span> mm</p>
+                </li>
+                <li class="forecast-item">
+                    <p class="forecast-time">{{ time6 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp6 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity6 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip6 }}</span> mm</p>
+                </li>
+                <li class="forecast-item">
+                    <p class="forecast-time">{{ time7 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp7 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity7 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip7 }}</span> mm</p>
+                </li>
+                <li class="forecast-item">
+                    <p class="forecast-time">{{ time8 }} </p>
+                    <p class="forecast-temperature">
+                        &nbsp;<span class="forecast-temperatureValue">{{ temp8 }}</span>
+                    </p>
+                    <p class="forecastwindText">
+                        Humidity: <span class="forecast-humidityValue">{{ humidity8 }}</span>
+                    </p>
+                    <p class="forecastwindText">Precipitation: <span class="forecast-precipValue">{{ precip8 }}</span> mm</p>
+                </li>
+            </ul>
+            <canvas id="Chart" height= "45px"></canvas>
+        </section>
+    </main>
+
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if future_times %}
+<script>
+    const ctx = document.getElementById('Chart').getContext('2d');
+
+    const forecastChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ future_times|safe }},
+            datasets: [
+                {
+                    label: 'Temperature (°C)',
+                    data: {{ future_temp|safe }},
+                    borderColor: 'tomato',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    label: 'Humidity (%)',
+                    data: {{ future_humidity|safe }},
+                    borderColor: 'deepskyblue',
+                    backgroundColor: 'rgba(30, 144, 255, 0.2)',
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    label: 'Precipitation Probability (%)',
+                    data: {{ future_precip|safe }},
+                    borderColor: 'mediumseagreen',
+                    backgroundColor: 'rgba(60, 179, 113, 0.2)',
+                    fill: false,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#fff'
+                    }
+                },
+                title: {
+                    display: true,
+                    text: '12-Hour Forecast Chart',
+                    color: '#fff',
+                    font: {
+                        size: 18
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#fff' },
+                    grid: { color: 'rgba(255, 255, 255, 0.2)' }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: '#fff' },
+                    grid: { color: 'rgba(255, 255, 255, 0.2)' }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+<script>
+function toggleDropdown(id) {
+  document.querySelectorAll('.dropdown-content').forEach(menu => {
+    if (menu.id !== id) menu.style.display = 'none';
+  });
+  const dropdown = document.getElementById(id);
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+// Close dropdowns if clicked outside
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    document.querySelectorAll('.dropdown-content').forEach(menu => {
+      menu.style.display = 'none';
+    });
+  }
+}
+</script>
+</body> 
+</html>
